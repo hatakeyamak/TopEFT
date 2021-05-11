@@ -1,0 +1,35 @@
+set param_card mass 6 172.5
+set param_card yukawa 6 172.5
+set param_card decay 6 auto
+set param_card MB 0.0
+set param_card ymb 0.0
+set param_card ctW -3.829383
+set param_card ctp 51.506206
+set param_card cpQM 23.000012
+set param_card cte2 8.938290
+set param_card cte3 8.938290
+set param_card cte1 8.938290
+set param_card ctl1 -7.009741
+set param_card ctl3 -7.009741
+set param_card ctl2 -7.009741
+set param_card cQe3 8.968551
+set param_card cQe2 8.968551
+set param_card cQe1 8.968551
+set param_card ctZ 5.727511
+set param_card cQlM2 6.952722
+set param_card cQlM3 6.952722
+set param_card cQlM1 6.952722
+set param_card cQl31 9.243556
+set param_card cQl32 9.243556
+set param_card cQl33 9.243556
+set param_card ctG 2.430539
+set param_card ctlT2 2.116792
+set param_card ctlT3 2.116792
+set param_card ctlT1 2.116792
+set param_card cbW -7.379428
+set param_card cpQ3 -14.449473
+set param_card cptb -21.850523
+set param_card cpt -20.317016
+set param_card ctlS3 -9.993360
+set param_card ctlS2 -9.993360
+set param_card ctlS1 -9.993360
