@@ -16,7 +16,7 @@ if [ -n "$2" ]
     cmssw_version=CMSSW_10_2_18
 fi
 echo "Running in ${cmssw_version}"
-                                                                                                                                             if [ -n "$3" ]
+                                                                                                                                           if [ -n "$3" ]
   then
     job_opt=${3}
   else
