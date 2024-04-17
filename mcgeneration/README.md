@@ -10,7 +10,7 @@ cd TopEFT/mcgeneration/
 ```
 
 ### Step 1: Get your UFO model
-First you need to download your preferred UFO model from the [feynrules model database](https://feynrules.irmp.ucl.ac.be/wiki/ModelDatabaseMainPage) and put it in [addons/models/](addons/models). 
+First you need to download your preferred UFO model from the [feynrules model database](https://feynrules.irmp.ucl.ac.be/wiki/ModelDatabaseMainPage) and put it in [addons/models/](addons/models).
 The [dim6top_LO_UFO](https://feynrules.irmp.ucl.ac.be/wiki/dim6top) has been included by default (date of writing: 10 Jan 2020).
 
 ### Step 2: Configuration for your process
@@ -29,14 +29,14 @@ Open [process_cfg.py](./process_cfg.py) and fill out all the necessary fields ou
     > **_grid_**: a rectangular grid of Wilson coefficients is scanned<br/>
     > **_minimal_**: a tetrahedron-construction of scan points that picks the minimal number of scan points needed for a fit of a given order<br/>
     > **_custom_**: a custom reweighting scheme is provided by the user
-    
+
 	Then navigate to the corresponding "if statement" and fill out the needed parameters:
 	> **_individual_**: "`points_individual`" is an array of arrays where in each subarray the user has to manually specify the values of the WCs to be scanned for the corresponding operator (using the same ordering as the "`operators`" variable).<br/>
     > **_rnd_scan_**: specify in "`n_points`" the number of scan points (NOTE: for N operators you need at least `1 + 2*N + (N*(N-1))/2` scan points to determine the quadratic function of the cross section). Then specify the boundaries for each operator in "`boundaries`".<br/>
     > **_grid_**: specify in each subarray of "`boundaries_and_npoints`" the lower and upper boundary as well as the number of points to be scanned for each operator. For k points and N operators, a grid of k^N points will be constructed.<br/>
     > **_minimal_**: specify in each subarray of "`boundaries_minimal_scan`" the lower and upper boundary of each operator. Also the "`order`" of the fitted yield must be given (usually 2, but can be 1 for interference only or larger than 2 for multiple insertions of EFT operators).<br/>
     > **_custom_**: The user has to manually specify the dictionary "`reweight_dict_tmp_`" where each key,value pair represents one specific scenario of a given set of WCs.
-    
+
     Finally, the SM scenario (all WCs put to 0), will be included by default.
     The naming convention (when not defining "custom" as a reweighting strategy) is defined by the `translate_weight_name` helper function. It starts with "rwgt_", followed by listing all operators with their values. Decimal points are replaced by "p" and minus signs by "min".
 
@@ -47,7 +47,7 @@ The [prepare_process.py](prepare_process.py) script will read out the configurat
 > proc_card.dat<br/>
 > reweight_card.dat<br/>
 > customizecards.dat<br/>
-	
+
 To this end, run:
 ```
 python prepare_process.py
@@ -65,10 +65,13 @@ This will create a new directory called "genproductions" alongside your current 
 ### Step 5: Run gridpack
 within the `genproductions/bin/MadGraph5_aMCatNLO/` folder, you can run this "`submit_gridpack_EFT.sh`" script by doing:
 ```
+# if run the job in screen
 source submit_gridpack_EFT.sh slc7_amd64_gcc700 CMSSW_10_2_18
+# if run the job in container interactively
+cmssw-el7 -- source submit_gridpack_EFT.sh slc7_amd64_gcc700 CMSSW_10_2_18 interactive >& gridpack_EFT.log &
 ```
-There are two optional arguments, namely the SCRAM architecture (argument 1) and the CMSSW version (argument 2) that are to be used for the gridpack generation. Make sure these are compatible with your machine (lxplus7 or lxplus6). If these are not given, by default the script takes `slc7_amd64_gcc700` and `CMSSW_10_2_18`, which can be run from lxplus7. 
-The above command will launch the gridpack creation locally but in a seperate `screen` session, so you can continue doing other things. You can monitor your screen sessions doing `screen -ls`, and you can attach to the running screen session by doing `screen -r (screenID)`. Use `ctrl+a+d` to detach again form an attached screen session. After the gridpack generation is finished, the screen session will terminate automatically (which is when you will know the job has finished, and it does not show up anymore in `screen -ls`). You should now see a tarball in your directory, which holds your gridpack.
+There are three optional arguments, namely the SCRAM architecture (argument 1) and the CMSSW version (argument 2) that are to be used for the gridpack generation. The third argument is for using screen or run the process interactively. Make sure these are compatible with your machine (lxplus7 or lxplus6). If these are not given, by default the script takes `slc7_amd64_gcc700`, `CMSSW_10_2_18`, and `screen`, which can be run from lxplus7.
+If you use the `screen` mode the command will launch the gridpack creation locally but in a seperate `screen` session, so you can continue doing other things. You can monitor your screen sessions doing `screen -ls`, and you can attach to the running screen session by doing `screen -r (screenID)`. Use `ctrl+a+d` to detach again form an attached screen session. After the gridpack generation is finished, the screen session will terminate automatically (which is when you will know the job has finished, and it does not show up anymore in `screen -ls`). You should now see a tarball in your directory, which holds your gridpack.
 
 **_NOTE: gridpack generation can take several minutes up to several hours, depending on your process and the amount of weights that need to be saved._**
 
@@ -105,11 +108,9 @@ Once all jobs have finished, the output is stored in the "`outdir`" in the form 
 ### Step 7: Merging several LHE files (optional)
 It is often convenient for further processing to have one single LHE files with all your events in it. To this end, a script named [MergeLHE.sh](MergeLHE.sh) was added which has one command-line argument: the directory where the LHE files are stored. In the example from above, where the LHE files are stored in `/eos/user/f/frank/test_eft_production`, you can thus run from the `genproductions/bin/MadGraph5_aMCatNLO/` directory:
 ```
-source MergeLHE.sh /eos/user/f/frank/test_eft_production/ 
+source MergeLHE.sh /eos/user/f/frank/test_eft_production/
 ```
 This will launch in a screen session the merging of the LHE files, resulting once finished in one single LHE file called `merged_LHE.lhe`. You are now free to delete the number subfiles to save storage space. The screen session can be monitored as explained in Step 5.
 
 **_NOTE: merging LHE files can take several minutes up to several hours, depending on the number of events. For more
 than ~100k events, this becomes practically very difficult._**
-
-
